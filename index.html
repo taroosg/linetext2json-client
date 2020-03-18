@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>linetext2json</title>
+</head>
+
+<body>
+  <h1>linetext2json</h1>
+  <form>
+    <input type="file" name="linetext" id="linetext" accept="txt/txt">
+    <button id="post" type="button">post</button>
+  </form>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const post = document.getElementById('post');
+
+    const postDataToNodejs = async (url, params, config) => {
+      const result = await axios.post(url, params, config);
+      return result;
+    }
+
+    post.addEventListener('click', () => {
+      // const url = 'http://localhost:5000/linetext2json/us-central1/api/linetext2json/v1';
+      const url = 'https://us-central1-linetext2json.cloudfunctions.net/api/linetext2json/v1';
+      const config = {
+        headers: {
+          'Content-Type': 'text/plain'
+        },
+        responseType: 'text'
+      };
+      const params = new FormData();
+      const fileData = document.getElementById('linetext').files[0];
+      params.append('linetext', fileData);
+      // console.log(...params.entries());
+
+      const result = postDataToNodejs(url, params, config).then(response => console.log(response.data));
+
+    });
+  </script>
+</body>
+
+</html>
